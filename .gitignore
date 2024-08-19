@@ -1,5 +1,5 @@
 node_modules/
 backup/
-rules/
+rules/rule.yml
 sgconfig.yml
 test_files/
