@@ -9,5 +9,8 @@
   },
   "dependencies": {
     "@ast-grep/napi": "^0.25.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
   }
 }

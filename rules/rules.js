@@ -1,114 +1,113 @@
-import { kind, Lang, pattern } from "@ast-grep/napi";
+import { Lang } from '@ast-grep/napi';
 
 export const tableCellRule = {
-    rule: {
-        all: [
+  rule: {
+    all: [
+      {
+        inside: {
+          any: [
             {
-                inside: {
-                    any: [
-                        {
-                            pattern: '<TableBody> $_BODY </TableBody>'
-                        },
-                        {
-                            pattern: '<TableHead> $_BODY </TableHead>'
-                        }],
-                    stopBy: 'end',
-                }
+              pattern: '<TableBody> $_BODY </TableBody>',
             },
             {
-                pattern: '<TableRow $$$ARGS> $$$CELLS </TableRow>'
+              pattern: '<TableHead> $_BODY </TableHead>',
             },
-        ]
-    },
-    language: Lang.Tsx
+          ],
+          stopBy: 'end',
+        },
+      },
+      {
+        pattern: '<TableRow $$$ARGS> $$$CELLS </TableRow>',
+      },
+    ],
+  },
+  language: Lang.Tsx,
 };
 
 export const tdRule = {
-    rule: {
-        all: [
-            {
-                inside: {
-                    pattern: '<tbody> $_BODY </tbody>',
-                    stopBy: 'end',
-                }
-            },
-            {
-                pattern: '<tr $$$ARGS> $$$CELLS </tr>'
-            },
-        ]
-    },
-    language: Lang.Tsx
+  rule: {
+    all: [
+      {
+        inside: {
+          pattern: '<tbody> $_BODY </tbody>',
+          stopBy: 'end',
+        },
+      },
+      {
+        pattern: '<tr $$$ARGS> $$$CELLS </tr>',
+      },
+    ],
+  },
+  language: Lang.Tsx,
 };
 
 export const formRule = {
-    rule: {
-        all: [
-            {
-                any: [
-                    {
-                        has: {
-                            pattern: '<TextField $$$_ARGS/>',
-                            stopBy: 'neighbor',
-                        }
-                    },
-                    {
-                        has: {
-                            pattern: '<input $$$_ARGS/>',
-                            stopBy: 'neighbor',
-                        }
-                    }]
+  rule: {
+    all: [
+      {
+        any: [
+          {
+            has: {
+              pattern: '<TextField $$$_ARGS/>',
+              stopBy: 'neighbor',
             },
-            {
-                pattern: '<$OPEN_TAG $$$ARGS> $$$BODY </$OPEN_TAG>'
+          },
+          {
+            has: {
+              pattern: '<input $$$_ARGS/>',
+              stopBy: 'neighbor',
             },
-        ]
-    },
-    language: Lang.Tsx
+          },
+        ],
+      },
+      {
+        pattern: '<$OPEN_TAG $$$ARGS> $$$BODY </$OPEN_TAG>',
+      },
+    ],
+  },
+  language: Lang.Tsx,
 };
 
-export const tableGridRule = (identifier) => {
-    return {
-        rule: {
-            all: [
-                {
-                    inside: {
-                        all: [
-                            { pattern: `const ${identifier} = $_` },
-                            { kind: 'lexical_declaration' }
-                        ],
-                        stopBy: 'end',
-                    }
-                },
-                {
-                    inside: {
-                        kind: 'arguments',
-                        stopBy: 'end',
-                    }
-                },
-                {
-                    nthChild: 1
-                },
-                {
-                    any: [
-                        {
-                            kind: 'arrow_function'
-                        },
-                        {
-                            kind: 'array'
-                        }
-                    ]
-                }
-            ]
+export const tableGridRule = identifier => {
+  return {
+    rule: {
+      all: [
+        {
+          inside: {
+            all: [{ pattern: `const ${identifier} = $_` }, { kind: 'lexical_declaration' }],
+            stopBy: 'end',
+          },
         },
-        language: Lang.Tsx
-    }
+        {
+          inside: {
+            kind: 'arguments',
+            stopBy: 'end',
+          },
+        },
+        {
+          nthChild: 1,
+        },
+        {
+          any: [
+            {
+              kind: 'arrow_function',
+            },
+            {
+              kind: 'array',
+            },
+          ],
+        },
+      ],
+    },
+    language: Lang.Tsx,
+  };
 };
 
 export const tableGridIdentifierRule = {
-    rule: {
-        any: [
-            { pattern: '<DataGrid $$$_ columns={$ID} $$$_/>' },
-            { pattern: '<DataGrid $$$_ columns={$ID} $$$_> $$$_ </DataGrid>' }
-        ]
-    }
-}
+  rule: {
+    any: [
+      { pattern: '<DataGrid $$$_ columns={$ID} $$$_/>' },
+      { pattern: '<DataGrid $$$_ columns={$ID} $$$_> $$$_ </DataGrid>' },
+    ],
+  },
+};
